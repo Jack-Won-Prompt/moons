@@ -27,13 +27,12 @@ class MisterMoonSeeder extends Seeder
         $cats  = $data['cats'];
         $items = $data['products'];
 
-        // Gallery enrichment: source_no => [gallery urls]  (from the detail-scraped subset)
+        // Gallery map: source_no => [local gallery image paths] (from full export galleries.json)
         $galMap = [];
-        if (is_file($subset)) {
-            foreach (json_decode(file_get_contents($subset), true)['products'] as $p) {
-                if (! empty($p['gallery'])) {
-                    $galMap[$p['no']] = array_map(fn ($g) => self::SRC . $g, $p['gallery']);
-                }
+        $galFile = database_path('data/galleries.json');
+        if (is_file($galFile)) {
+            foreach (json_decode(file_get_contents($galFile), true) as $sno => $urls) {
+                $galMap[$sno] = array_map([$this, 'galleryLocal'], $urls);
             }
         }
 
@@ -71,11 +70,9 @@ class MisterMoonSeeder extends Seeder
             if ($price <= 0) $price = $sale ?: 100000;
             $discount = ($sale && $price) ? round(($price - $sale) / $price * 100) : 0;
 
-            // Prefer a locally-downloaded image; else reference remotely.
-            $image = null;
-            $local = 'assets/products/' . $p['no'] . '.jpg';
-            if (is_file(base_path($local))) { $image = $local; $localImgs++; }
-            elseif (! empty($p['img'])) { $image = self::SRC . '/web/product/medium/' . $p['img']; }
+            // Local image only — no remote references (images are FTP-uploaded to the server).
+            $image = ! empty($p['img']) ? 'assets/products/' . $p['no'] . '.jpg' : null;
+            if ($image) $localImgs++;
 
             $gallery = $galMap[$p['no']] ?? null;
 
@@ -109,5 +106,13 @@ class MisterMoonSeeder extends Seeder
         }
 
         $this->command->info("Imported {$imported} products (" . count($catMap) . " categories, {$localImgs} local imgs, " . count($galMap) . " with gallery).");
+    }
+
+    /** Convert a MisterMoon gallery URL/path to a local asset path. */
+    public function galleryLocal(string $url): string
+    {
+        $pos = strpos($url, '/web/product');
+
+        return $pos === false ? $url : 'assets/products/g' . substr($url, $pos + strlen('/web/product'));
     }
 }

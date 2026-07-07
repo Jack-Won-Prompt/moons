@@ -28,8 +28,9 @@
                         </button>
                     @endif
                     @foreach($product->gallery as $g)
-                        <button type="button" class="pd__thumb" onclick="pdSwap(this,'{{ $g }}')">
-                            <img src="{{ $g }}" alt="" loading="lazy">
+                        @php $gsrc = \Illuminate\Support\Str::startsWith($g, 'http') ? $g : asset($g); @endphp
+                        <button type="button" class="pd__thumb" onclick="pdSwap(this,'{{ $gsrc }}')">
+                            <img src="{{ $gsrc }}" alt="" loading="lazy">
                         </button>
                     @endforeach
                 </div>

@@ -48,9 +48,14 @@ php artisan db:seed --class=MisterMoonSeeder
 - `php artisan mm:galleries` — 상세페이지에서 갤러리 이미지 보충 (이어하기·동시요청)
 - `php artisan mm:brands` — 한글 상품명의 브랜드를 한→영 매핑으로 교정
 
-## 이미지 정책
-대표 이미지 1,680개는 `assets/products/`에 로컬 저장했으나 **용량(~266MB) 때문에 저장소에서 제외**했습니다.
-클론 후 시더를 돌리면 로컬 파일이 없는 상품은 미스터문 원본 URL(`https://mistermoon.co.kr/web/product/...`)을 참조하므로 사이트는 그대로 동작합니다.
+## 이미지 정책 (로컬 전용, 원격 참조 없음)
+모든 이미지는 **로컬 파일만 참조**하며 미스터문 원본 URL을 런타임에 참조하지 않습니다.
+- 대표 이미지: `assets/products/{source_no}.jpg` (14,386개)
+- 상세 갤러리: `assets/products/g/...` (약 100,000개)
+
+용량이 크므로(~7GB) 이미지 자체는 **git에서 제외**(`/assets/products` 무시)하고 **FTP로 서버에 업로드**합니다.
+경로 재현·재시딩에 필요한 메타데이터(`database/data/galleries.json` 등)는 저장소에 포함되어, 이미지를 올린 뒤 `MisterMoonSeeder`를 돌리면 DB가 로컬 경로로 채워집니다.
+로컬 이미지를 다시 내려받는 스크립트는 세션 스크래치패드의 `dl_main.php` / `dl_gallery.php`를 참고하세요.
 
 ---
 데모/학습 목적의 프로젝트입니다. 상품 데이터·이미지의 저작권은 각 브랜드 및 미스터문에 있습니다.
