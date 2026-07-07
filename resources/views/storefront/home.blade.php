@@ -7,22 +7,53 @@
     {{-- Hero --}}
     <section class="hero">
         <div class="hero__grid">
-            <a href="{{ route('catalog.all', ['sort'=>'discount']) }}" class="hero__card"
-               style="background:linear-gradient(135deg,#1a1a2e,#4b1248)">
-                <div>
-                    <div class="eyebrow">MOONS Exclusive</div>
-                    <h2>이번 시즌 럭셔리<br>최대 45% 특가</h2>
-                    <p>전 세계 명품을 가장 합리적인 가격으로 만나보세요</p>
+            @if($slides->count())
+                <div class="hero__slider" id="heroSlider" data-count="{{ $slides->count() }}">
+                    <div class="hero__track">
+                        @foreach($slides as $s)
+                            <a href="{{ route('catalog.product', $s) }}" class="hero__slide">
+                                <img src="{{ $s->image_url }}" alt="{{ $s->name }}" {{ $loop->first ? '' : 'loading=lazy' }}>
+                                <div class="hero__slide-cap">
+                                    <div class="eyebrow">MOONS EXCLUSIVE · {{ $s->brand }}</div>
+                                    <h2>{{ \Illuminate\Support\Str::limit($s->name, 40) }}</h2>
+                                    <p class="hero__slide-price">
+                                        @if($s->discount_rate)<span class="rate">{{ $s->discount_rate }}%</span>@endif
+                                        <span class="now">{{ number_format($s->final_price) }}원</span>
+                                        @if($s->discount_rate)<span class="was">{{ number_format($s->price) }}원</span>@endif
+                                    </p>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                    <button class="hero__nav prev" type="button" aria-label="이전">‹</button>
+                    <button class="hero__nav next" type="button" aria-label="다음">›</button>
+                    <div class="hero__dots">
+                        @foreach($slides as $i => $s)
+                            <button type="button" class="dot {{ $i === 0 ? 'on' : '' }}" data-i="{{ $i }}" aria-label="{{ $i + 1 }}번 슬라이드"></button>
+                        @endforeach
+                    </div>
                 </div>
-            </a>
-            <div class="hero__stack">
-                <a href="{{ route('catalog.category', 'bags') }}" class="hero__card hero__card--sm"
-                   style="background:linear-gradient(135deg,#603813,#b29f94)">
-                    <div><div class="eyebrow">Bags</div><h2>잇백 컬렉션</h2></div>
+            @else
+                <a href="{{ route('catalog.all', ['sort'=>'discount']) }}" class="hero__card"
+                   style="background:linear-gradient(135deg,#1a1a2e,#4b1248)">
+                    <div>
+                        <div class="eyebrow">MOONS Exclusive</div>
+                        <h2>이번 시즌 럭셔리<br>최대 45% 특가</h2>
+                        <p>전 세계 명품을 가장 합리적인 가격으로 만나보세요</p>
+                    </div>
                 </a>
-                <a href="{{ route('catalog.category', 'shoes') }}" class="hero__card hero__card--sm"
+            @endif
+
+            <div class="hero__stack">
+                <a href="{{ route('catalog.category', 'handbags') }}" class="hero__card hero__card--sm"
+                   style="background:linear-gradient(135deg,#603813,#b29f94)">
+                    @if($bagFeature)<img class="hero__card-bg" src="{{ $bagFeature->image_url }}" alt="" loading="lazy">@endif
+                    <div><div class="eyebrow">Handbags</div><h2>잇백 컬렉션</h2></div>
+                </a>
+                <a href="{{ route('catalog.category', 'womens-shoes') }}" class="hero__card hero__card--sm"
                    style="background:linear-gradient(135deg,#2b5876,#4e4376)">
-                    <div><div class="eyebrow">Shoes</div><h2>슈즈 신상</h2></div>
+                    @if($shoeFeature)<img class="hero__card-bg" src="{{ $shoeFeature->image_url }}" alt="" loading="lazy">@endif
+                    <div><div class="eyebrow">Shoes</div><h2>슈즈 컬렉션</h2></div>
                 </a>
             </div>
         </div>
@@ -86,4 +117,33 @@
     @endif
 
 </div>
+
+<script>
+    (function () {
+        var slider = document.getElementById('heroSlider');
+        if (!slider) return;
+        var track = slider.querySelector('.hero__track');
+        var dots  = Array.prototype.slice.call(slider.querySelectorAll('.dot'));
+        var count = parseInt(slider.getAttribute('data-count'), 10) || 1;
+        var i = 0, timer;
+
+        function go(n) {
+            i = (n + count) % count;
+            track.style.transform = 'translateX(-' + (i * 100) + '%)';
+            dots.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+        }
+        function next() { go(i + 1); }
+        function start() { stop(); timer = setInterval(next, 4500); }
+        function stop() { if (timer) clearInterval(timer); }
+
+        slider.querySelector('.next').addEventListener('click', function (e) { e.preventDefault(); next(); start(); });
+        slider.querySelector('.prev').addEventListener('click', function (e) { e.preventDefault(); go(i - 1); start(); });
+        dots.forEach(function (d) {
+            d.addEventListener('click', function (e) { e.preventDefault(); go(parseInt(d.getAttribute('data-i'), 10)); start(); });
+        });
+        slider.addEventListener('mouseenter', stop);
+        slider.addEventListener('mouseleave', start);
+        start();
+    })();
+</script>
 @endsection

@@ -16,6 +16,19 @@ class HomeController extends Controller
 
         $rootCategories = Category::roots()->where('is_active', true)->get();
 
-        return view('storefront.home', compact('newArrivals', 'best', 'sale', 'rootCategories'));
+        // Hero slider — high-discount products that have an image
+        $slides = Product::active()->whereNotNull('image')->whereNotNull('sale_price')
+            ->orderByRaw('(price - sale_price) / price DESC')
+            ->take(6)->get();
+
+        // Side feature cards (image backgrounds)
+        $bagFeature  = Product::active()->whereNotNull('image')
+            ->whereRelation('category', 'slug', 'handbags')->where('is_best', true)->first();
+        $shoeFeature = Product::active()->whereNotNull('image')
+            ->whereRelation('category', 'slug', 'womens-shoes')->where('is_best', true)->first();
+
+        return view('storefront.home', compact(
+            'newArrivals', 'best', 'sale', 'rootCategories', 'slides', 'bagFeature', 'shoeFeature'
+        ));
     }
 }
