@@ -301,6 +301,42 @@ img.ph { object-fit: cover; background: #f2f2f2; }
     display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 
 /* ------------------------------------------------------------------ */
+/* Sell / appraisal / certificate shared components                   */
+/* ------------------------------------------------------------------ */
+.pill { font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; display: inline-block; }
+.pill--green { background: #e7f8ef; color: #12b76a; }
+.pill--amber { background: #fef3e6; color: #f79009; }
+.pill--red   { background: #fdecef; color: #ff2d55; }
+.pill--gray  { background: #eef0f3; color: #6b7080; }
+
+.panel-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 24px; margin-bottom: 18px; }
+.panel-card h3 { margin: 0 0 16px; font-size: 16px; font-weight: 800; }
+
+.dl-grid { display: grid; grid-template-columns: 130px 1fr; gap: 12px 0; font-size: 14px; margin: 0; }
+.dl-grid dt { color: var(--muted); }
+.dl-grid dd { margin: 0; }
+
+/* Status timeline */
+.timeline { display: flex; gap: 0; overflow-x: auto; padding: 4px 0; }
+.timeline .step { flex: 1; min-width: 84px; text-align: center; position: relative; font-size: 12px; color: var(--muted); }
+.timeline .step::before { content: ""; position: absolute; top: 11px; left: -50%; width: 100%; height: 2px; background: var(--line); z-index: 0; }
+.timeline .step:first-child::before { display: none; }
+.timeline .step .dot { position: relative; z-index: 1; width: 24px; height: 24px; border-radius: 50%; margin: 0 auto 8px;
+    background: #fff; border: 2px solid var(--line); display: grid; place-items: center; font-size: 12px; }
+.timeline .step.done { color: var(--ink); font-weight: 700; }
+.timeline .step.done .dot { background: var(--ink); border-color: var(--ink); color: #fff; }
+.timeline .step.current .dot { border-color: var(--gold); background: var(--gold); color: #fff; box-shadow: 0 0 0 4px rgba(180,138,74,.18); }
+
+/* DPP passport timeline */
+.dpp { list-style: none; margin: 0; padding: 0; }
+.dpp li { position: relative; padding: 0 0 20px 26px; font-size: 14px; }
+.dpp li::before { content: ""; position: absolute; left: 6px; top: 4px; bottom: -4px; width: 2px; background: var(--line); }
+.dpp li:last-child::before { display: none; }
+.dpp li .marker { position: absolute; left: 0; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--gold); border: 3px solid #fff; box-shadow: 0 0 0 1px var(--gold); }
+.dpp li .t { font-weight: 700; }
+.dpp li .m { color: var(--muted); font-size: 12px; }
+
+/* ------------------------------------------------------------------ */
 /* Empty state                                                        */
 /* ------------------------------------------------------------------ */
 .empty { text-align: center; padding: 80px 20px; color: var(--muted); }

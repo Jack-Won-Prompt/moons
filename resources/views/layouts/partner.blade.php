@@ -17,6 +17,8 @@
             <div class="grouplabel">파트너센터</div>
             <a class="side__link {{ $r==='partner.dashboard' ? 'on' : '' }}" href="{{ route('partner.dashboard') }}"><span class="i">📊</span>대시보드</a>
             <a class="side__link {{ str_starts_with($r,'partner.products') ? 'on' : '' }}" href="{{ route('partner.products.index') }}"><span class="i">📦</span>내 상품</a>
+            <div class="grouplabel">감정 · 매입</div>
+            <a class="side__link {{ str_starts_with($r,'partner.intakes') ? 'on' : '' }}" href="{{ route('partner.intakes.index') }}"><span class="i">🔍</span>판매 접수 · 감정</a>
             <div class="grouplabel">바로가기</div>
             <a class="side__link" href="{{ route('home') }}" target="_blank"><span class="i">🛍️</span>쇼핑몰 보기</a>
         </nav>

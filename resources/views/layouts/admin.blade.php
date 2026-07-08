@@ -17,7 +17,10 @@
             <div class="grouplabel">운영</div>
             <a class="side__link {{ $r==='admin.dashboard' ? 'on' : '' }}" href="{{ route('admin.dashboard') }}"><span class="i">📊</span>대시보드</a>
             <a class="side__link {{ str_starts_with($r,'admin.products') ? 'on' : '' }}" href="{{ route('admin.products.index') }}"><span class="i">📦</span>상품 관리</a>
-            <a class="side__link {{ str_starts_with($r,'admin.partners') ? 'on' : '' }}" href="{{ route('admin.partners.index') }}"><span class="i">🤝</span>파트너 관리</a>
+            <a class="side__link {{ str_starts_with($r,'admin.partners') ? 'on' : '' }}" href="{{ route('admin.partners.index') }}"><span class="i">🤝</span>지점(파트너) 관리</a>
+            <div class="grouplabel">감정 · 거래</div>
+            <a class="side__link {{ str_starts_with($r,'admin.sell') ? 'on' : '' }}" href="{{ route('admin.sell.index') }}"><span class="i">🔍</span>감정 · 접수 관리</a>
+            <a class="side__link {{ str_starts_with($r,'admin.certificates') ? 'on' : '' }}" href="{{ route('admin.certificates.index') }}"><span class="i">🎖️</span>블록체인 감정서</a>
             <div class="grouplabel">바로가기</div>
             <a class="side__link" href="{{ route('home') }}" target="_blank"><span class="i">🛍️</span>쇼핑몰 보기</a>
         </nav>

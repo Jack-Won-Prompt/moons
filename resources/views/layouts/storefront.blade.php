@@ -19,6 +19,8 @@
         @auth('web')
             <span>{{ $me->name }}님</span>
             <span class="sep">·</span>
+            <a href="{{ route('sell.history') }}">판매현황</a>
+            <span class="sep">·</span>
             <a href="{{ route('mypage') }}">마이페이지</a>
             <span class="sep">·</span>
             <form action="{{ route('logout') }}" method="POST" style="display:inline">@csrf
@@ -44,7 +46,8 @@
             <input type="text" name="q" placeholder="브랜드, 상품을 검색해보세요" value="{{ request('q') }}">
         </form>
         <div class="header__actions">
-            <a href="{{ route('catalog.all') }}" class="iconbtn"><span class="i">🛍️</span>전체상품</a>
+            <a href="{{ route('sell.create') }}" class="iconbtn"><span class="i">💰</span>판매하기</a>
+            <a href="{{ route('verify.index') }}" class="iconbtn"><span class="i">🎖️</span>감정서</a>
             <a href="{{ auth('web')->check() ? route('mypage') : route('login') }}" class="iconbtn"><span class="i">❤️</span>위시</a>
             <a href="{{ auth('web')->check() ? route('mypage') : route('login') }}" class="iconbtn"><span class="i">👤</span>마이</a>
         </div>
