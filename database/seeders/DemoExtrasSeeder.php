@@ -79,14 +79,21 @@ class DemoExtrasSeeder extends Seeder
             'stock'       => 3, 'is_new' => true, 'is_best' => true, 'is_active' => true,
         ]);
 
-        /* 배너 */
+        /* 배너 (대표 상품 이미지로 채움) */
+        $bagImg  = Product::whereRelation('category', 'slug', 'handbags')->where('image', 'like', 'assets/products/%')->inRandomOrder()->value('image');
+        $watchImg = Product::whereRelation('category', 'slug', 'watches')->where('image', 'like', 'assets/products/%')->inRandomOrder()->value('image');
         Banner::updateOrCreate(['title' => '단독 특가 위크'], [
             'eyebrow' => 'MOONS ONLY', 'subtitle' => '이번 주만 만나는 단독 할인', 'gradient' => '#1a1a2e,#4b1248',
-            'link' => '/products?sort=discount', 'position' => 'hero', 'sort' => 0, 'is_active' => true,
+            'image' => $bagImg, 'link' => '/products?sort=discount', 'position' => 'hero', 'sort' => 0, 'is_active' => true,
+        ]);
+        Banner::updateOrCreate(['title' => '럭셔리 워치 컬렉션'], [
+            'eyebrow' => 'TIMELESS', 'subtitle' => '정품 감정 완료 명품 시계', 'gradient' => '#0f3443,#203a43',
+            'image' => $watchImg, 'link' => '/category/watches', 'position' => 'hero', 'sort' => 1, 'is_active' => true,
         ]);
         Banner::updateOrCreate(['title' => '신규회원 15만원 쿠폰'], [
             'eyebrow' => 'WELCOME', 'subtitle' => '지금 가입하고 혜택 받기', 'gradient' => '#0f3443,#34e89e',
-            'link' => '/register', 'position' => 'hero', 'sort' => 1, 'is_active' => true,
+            'image' => Product::whereRelation('category', 'slug', 'accessories')->where('image', 'like', 'assets/products/%')->inRandomOrder()->value('image'),
+            'link' => '/register', 'position' => 'hero', 'sort' => 2, 'is_active' => true,
         ]);
 
         /* 기획전 */

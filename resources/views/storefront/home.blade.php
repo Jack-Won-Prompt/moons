@@ -91,18 +91,25 @@
         <div class="section__head"><div class="section__title">기획전 <small>MOONS가 준비한 특별 기획</small></div></div>
         <div class="promo-grid">
             @foreach($promotions as $promo)
+                @php $cover = $promo->coverImage(); @endphp
                 <a href="{{ route('content.promotion', $promo) }}" class="promo-card" style="background:linear-gradient(135deg,{{ $promo->gradient ?: '#1a1a2e,#4b1248' }})">
-                    <div class="eyebrow">기획전</div>
-                    <h3>{{ $promo->title }}</h3>
-                    @if($promo->subtitle)<p>{{ $promo->subtitle }}</p>@endif
+                    @if($cover)<img class="promo-bg" src="{{ $cover }}" alt="" loading="lazy">@endif
+                    <div class="promo-cap">
+                        <div class="eyebrow">기획전</div>
+                        <h3>{{ $promo->title }}</h3>
+                        @if($promo->subtitle)<p>{{ $promo->subtitle }}</p>@endif
+                    </div>
                 </a>
             @endforeach
         </div>
     </section>
     <style>
         .promo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-        .promo-card{border-radius:14px;padding:28px 24px;color:#fff;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
-        .promo-card .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+        .promo-card{position:relative;overflow:hidden;border-radius:14px;padding:28px 24px;color:#fff;min-height:210px;display:flex;flex-direction:column;justify-content:flex-end}
+        .promo-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+        .promo-card::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 30%,rgba(0,0,0,.75));z-index:1}
+        .promo-cap{position:relative;z-index:2}
+        .promo-card .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
         .promo-card h3{font-size:20px;font-weight:700;margin:6px 0 4px} .promo-card p{font-size:13px;opacity:.9;margin:0}
         @media(max-width:720px){ .promo-grid{grid-template-columns:1fr} }
     </style>

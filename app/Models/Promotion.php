@@ -15,6 +15,16 @@ class Promotion extends Model
         return 'code';
     }
 
+    /** 기획전 대표(커버) 이미지 — 조건에 맞는 첫 상품 이미지 */
+    public function coverImage(): ?string
+    {
+        if ($this->thumbnail) {
+            return str_starts_with($this->thumbnail, 'http') ? $this->thumbnail : asset($this->thumbnail);
+        }
+
+        return optional($this->products()->inRandomOrder()->first())->image_url;
+    }
+
     /** 기획전 조건에 맞는 상품 쿼리 */
     public function products()
     {
