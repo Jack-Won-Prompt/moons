@@ -103,7 +103,7 @@
         .promo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
         .promo-card{border-radius:14px;padding:28px 24px;color:#fff;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
         .promo-card .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
-        .promo-card h3{font-size:20px;font-weight:800;margin:6px 0 4px} .promo-card p{font-size:13px;opacity:.9;margin:0}
+        .promo-card h3{font-size:20px;font-weight:700;margin:6px 0 4px} .promo-card p{font-size:13px;opacity:.9;margin:0}
         @media(max-width:720px){ .promo-grid{grid-template-columns:1fr} }
     </style>
     @endif

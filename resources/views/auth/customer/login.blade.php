@@ -54,7 +54,7 @@
             .sns-sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin-bottom:14px}
             .sns-sep::before,.sns-sep::after{content:"";flex:1;height:1px;background:var(--line)}
             .sns-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-            .sns-btn{padding:12px 0;border-radius:11px;text-align:center;font-weight:700;font-size:14px}
+            .sns-btn{padding:12px 0;border-radius:11px;text-align:center;font-weight:600;font-size:14px}
         </style>
 
         <div style="margin-top:18px;padding:12px 14px;background:var(--bg-alt);border-radius:11px;font-size:12px;color:var(--muted);text-align:center">

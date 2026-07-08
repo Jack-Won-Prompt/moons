@@ -37,9 +37,9 @@
     .sr-thumb { width:64px;height:64px;border-radius:10px;background:var(--bg-alt);display:grid;place-items:center;overflow:hidden;flex:none;font-size:26px }
     .sr-thumb img { width:100%;height:100%;object-fit:cover }
     .sr-code { font-size:12px;color:var(--muted) }
-    .sr-title { font-weight:700;margin:2px 0 3px }
+    .sr-title { font-weight:600;margin:2px 0 3px }
     .sr-sub { font-size:13px;color:var(--ink-soft) }
-    .pill { font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;white-space:nowrap }
+    .pill { font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px;white-space:nowrap }
     .pill--green{background:#e7f8ef;color:#12b76a}.pill--amber{background:#fef3e6;color:#f79009}
     .pill--red{background:#fdecef;color:#ff2d55}.pill--gray{background:#eef0f3;color:#6b7080}
 </style>

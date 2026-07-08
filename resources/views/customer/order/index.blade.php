@@ -28,6 +28,6 @@
     .sr-row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;transition:box-shadow .15s}
     .sr-row:hover{box-shadow:var(--shadow)} .sr-thumb{width:64px;height:64px;border-radius:10px;background:var(--bg-alt);display:grid;place-items:center;overflow:hidden;font-size:26px;flex:none}
     .sr-thumb img{width:100%;height:100%;object-fit:cover}
-    .sr-code{font-size:12px;color:var(--muted)} .sr-title{font-weight:700;margin:2px 0 3px} .sr-sub{font-size:13px;color:var(--ink-soft)}
+    .sr-code{font-size:12px;color:var(--muted)} .sr-title{font-weight:600;margin:2px 0 3px} .sr-sub{font-size:13px;color:var(--ink-soft)}
 </style>
 @endsection

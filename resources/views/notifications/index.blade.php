@@ -44,7 +44,7 @@
     .noti-item.unread .noti-btn{background:#fbfaf6}
     .noti-ico{font-size:22px;flex:none;line-height:1.3}
     .noti-main{flex:1;display:flex;flex-direction:column;gap:3px}
-    .noti-title{font-weight:700;font-size:14px}
+    .noti-title{font-weight:600;font-size:14px}
     .noti-body{font-size:13px;color:#555}
     .noti-meta{font-size:11px;color:#999;display:flex;gap:6px;align-items:center;margin-top:2px}
     .noti-ch{background:#eef0f3;color:#6b7080;border-radius:4px;padding:1px 6px}

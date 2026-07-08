@@ -28,7 +28,7 @@
     .review-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
     .review-photo{aspect-ratio:1;background:var(--bg-alt)} .review-photo img{width:100%;height:100%;object-fit:cover}
     .review-body{padding:14px} .stars{color:var(--gold);font-size:14px;letter-spacing:2px}
-    .review-brand{font-weight:800;font-size:14px;margin:5px 0 3px} .review-body p{font-size:13px;color:var(--ink-soft);margin:0 0 8px;min-height:34px}
+    .review-brand{font-weight:700;font-size:14px;margin:5px 0 3px} .review-body p{font-size:13px;color:var(--ink-soft);margin:0 0 8px;min-height:34px}
     .review-user{font-size:12px;color:var(--muted)}
     @media(max-width:900px){.review-grid{grid-template-columns:repeat(2,1fr)}}
 </style>

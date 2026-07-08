@@ -14,7 +14,7 @@
         @if(session('status'))<div class="alert alert--ok">{{ session('status') }}</div>@endif
         @if(session('reset_link'))
             <div style="margin-bottom:14px;padding:12px;background:var(--bg-alt);border-radius:10px;font-size:12px">
-                🔧 데모 링크: <a href="{{ session('reset_link') }}" style="color:var(--ink);font-weight:700;word-break:break-all">{{ Str::limit(session('reset_link'),50) }}</a></div>
+                🔧 데모 링크: <a href="{{ session('reset_link') }}" style="color:var(--ink);font-weight:600;word-break:break-all">{{ Str::limit(session('reset_link'),50) }}</a></div>
         @endif
         <form action="{{ route('password.email') }}" method="POST">@csrf
             <div class="field"><label>이메일</label><input type="email" name="email" value="{{ old('email') }}" required autofocus></div>

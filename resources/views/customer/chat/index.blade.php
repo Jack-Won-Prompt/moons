@@ -28,6 +28,6 @@
 <style>
     .sr-row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px;transition:box-shadow .15s}
     .sr-row:hover{box-shadow:var(--shadow)} .sr-thumb{width:52px;height:52px;border-radius:12px;background:var(--bg-alt);display:grid;place-items:center;font-size:24px;flex:none}
-    .sr-code{font-size:12px;color:var(--muted)} .sr-title{font-weight:700;margin:2px 0 3px} .sr-sub{font-size:13px;color:var(--ink-soft)}
+    .sr-code{font-size:12px;color:var(--muted)} .sr-title{font-weight:600;margin:2px 0 3px} .sr-sub{font-size:13px;color:var(--ink-soft)}
 </style>
 @endsection

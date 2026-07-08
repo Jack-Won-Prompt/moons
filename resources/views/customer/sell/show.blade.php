@@ -94,7 +94,7 @@
                         <b>{{ $bid->store->company_name }}</b> {!! $bid->status==='won' ? '<span class="pill pill--green">낙찰</span>' : '' !!}
                         @if($bid->message)<div style="font-size:13px;color:var(--muted)">{{ $bid->message }}</div>@endif
                     </div>
-                    <div style="font-size:18px;font-weight:800">{{ number_format($bid->bid_price) }}원</div>
+                    <div style="font-size:18px;font-weight:700">{{ number_format($bid->bid_price) }}원</div>
                     @if($sr->status === 'auctioning')
                         <form action="{{ route('sell.approve', $sr) }}" method="POST">@csrf
                             <input type="hidden" name="bid_id" value="{{ $bid->id }}">
@@ -111,7 +111,7 @@
         <div class="panel-card" style="border-color:var(--ink)">
             <h3>견적 금액</h3>
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-                <div style="font-size:30px;font-weight:800">{{ number_format($sr->quote_price) }}원 <small style="font-size:14px;color:var(--muted)">by {{ $sr->target_label }}</small></div>
+                <div style="font-size:30px;font-weight:700">{{ number_format($sr->quote_price) }}원 <small style="font-size:14px;color:var(--muted)">by {{ $sr->target_label }}</small></div>
                 @if($sr->status === 'quoted')
                     <form action="{{ route('sell.approve', $sr) }}" method="POST">@csrf
                         <button class="btn btn--primary btn--lg" type="submit">견적 승인하기</button>

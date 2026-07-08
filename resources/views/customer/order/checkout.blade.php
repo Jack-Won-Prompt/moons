@@ -40,7 +40,7 @@
                     <div style="width:44px;height:44px;border-radius:8px;overflow:hidden;background:var(--bg-alt);flex:none">
                         @if($it->product->image)<img src="{{ $it->product->image_url }}" style="width:100%;height:100%;object-fit:cover">@endif</div>
                     <div style="flex:1;font-size:13px"><b>{{ $it->product->brand }}</b><br>{{ Str::limit($it->product->name,20) }} · {{ $it->quantity }}개</div>
-                    <div style="font-weight:700;font-size:13px">{{ number_format($it->line_total) }}원</div>
+                    <div style="font-weight:600;font-size:13px">{{ number_format($it->line_total) }}원</div>
                 </div>
             @endforeach
             {{-- 쿠폰 --}}

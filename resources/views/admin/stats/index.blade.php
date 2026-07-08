@@ -87,7 +87,7 @@
     .bar{width:70%;max-width:52px;background:linear-gradient(180deg,#111,#444);border-radius:6px 6px 0 0}
     .bar-val{font-size:11px;color:var(--p-muted);margin-bottom:5px} .bar-lbl{font-size:12px;color:var(--p-muted);margin-top:8px}
     .hbar-row{display:flex;align-items:center;gap:12px;margin-bottom:11px}
-    .hbar-lbl{width:70px;font-size:13px;font-weight:600;flex:none} .hbar-num{font-size:13px;font-weight:700;width:40px;text-align:right}
+    .hbar-lbl{width:70px;font-size:13px;font-weight:600;flex:none} .hbar-num{font-size:13px;font-weight:600;width:40px;text-align:right}
     .hbar{flex:1;height:12px;background:#f0f0f2;border-radius:6px;overflow:hidden} .hbar>div{height:100%;border-radius:6px;min-width:2px}
 </style>
 @endsection

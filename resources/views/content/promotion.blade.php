@@ -22,7 +22,7 @@
 <style>
     .promo-hero{border-radius:16px;padding:50px 40px;color:#fff;margin-top:24px}
     .promo-hero .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.85}
-    .promo-hero h1{font-size:32px;font-weight:800;margin:10px 0 6px}
+    .promo-hero h1{font-size:32px;font-weight:700;margin:10px 0 6px}
     .promo-hero p{opacity:.9;margin:0}
 </style>
 @endsection

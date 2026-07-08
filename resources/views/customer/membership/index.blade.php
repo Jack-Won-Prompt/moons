@@ -12,12 +12,12 @@
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
             <div>
                 <div style="font-size:12px;color:var(--muted)">{{ $user->name }}님의 등급</div>
-                <div style="font-size:30px;font-weight:800;color:{{ $gi[3] }}">{{ $gi[0] }}</div>
+                <div style="font-size:30px;font-weight:700;color:{{ $gi[3] }}">{{ $gi[0] }}</div>
                 <div style="font-size:13px;color:var(--muted)">적립률 {{ $gi[2]*100 }}% · 누적구매 {{ number_format($user->total_spent) }}원</div>
             </div>
             <div style="text-align:right">
                 <div style="font-size:12px;color:var(--muted)">보유 포인트</div>
-                <div style="font-size:30px;font-weight:800">{{ number_format($user->points) }}<small style="font-size:14px">P</small></div>
+                <div style="font-size:30px;font-weight:700">{{ number_format($user->points) }}<small style="font-size:14px">P</small></div>
             </div>
         </div>
         {{-- 등급 진행 --}}
@@ -25,7 +25,7 @@
             @foreach(\App\Models\User::GRADES as $k=>$g)
                 <div style="flex:1;text-align:center">
                     <div style="height:6px;border-radius:3px;background:{{ $user->total_spent >= $g[1] ? $g[3] : '#eee' }}"></div>
-                    <div style="font-size:11px;margin-top:5px;color:{{ $user->grade===$k ? 'var(--ink)' : 'var(--muted)' }};font-weight:{{ $user->grade===$k?'800':'500' }}">{{ $g[0] }}</div>
+                    <div style="font-size:11px;margin-top:5px;color:{{ $user->grade===$k ? 'var(--ink)' : 'var(--muted)' }};font-weight:{{ $user->grade===$k?'700':'500' }}">{{ $g[0] }}</div>
                     <div style="font-size:10px;color:var(--muted)">{{ $g[1]>0 ? number_format($g[1]/10000).'만' : '0' }}</div>
                 </div>
             @endforeach
@@ -66,7 +66,7 @@
         @forelse($user->pointTransactions->take(15) as $pt)
             <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line-soft);font-size:14px">
                 <span>{{ $pt->reason }}<div style="font-size:11px;color:var(--muted)">{{ $pt->created_at->format('Y.m.d H:i') }}</div></span>
-                <span style="font-weight:800;color:{{ $pt->amount>0?'#12b76a':'#ff2d55' }}">{{ $pt->amount>0?'+':'' }}{{ number_format($pt->amount) }}P</span>
+                <span style="font-weight:700;color:{{ $pt->amount>0?'#12b76a':'#ff2d55' }}">{{ $pt->amount>0?'+':'' }}{{ number_format($pt->amount) }}P</span>
             </div>
         @empty
             <p style="color:var(--muted)">포인트 내역이 없습니다.</p>

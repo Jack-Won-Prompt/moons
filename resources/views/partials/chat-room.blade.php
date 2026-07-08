@@ -48,7 +48,7 @@
 <style>
     .chatroom { display:flex;flex-direction:column;height:70vh;min-height:460px;background:#fff;border:1px solid #ececec;border-radius:16px;overflow:hidden }
     .chatroom__head { display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid #ececec }
-    .chatroom__title { font-weight:800 }
+    .chatroom__title { font-weight:700 }
     .chatroom__sub { font-size:12px;color:#8a8a8f;margin-top:2px }
     .chatroom__body { flex:1;overflow-y:auto;padding:20px;background:#fafafa;display:flex;flex-direction:column;gap:12px }
     .chat-sys { align-self:center;font-size:12px;color:#8a8a8f;background:#fff;border:1px solid #ececec;border-radius:999px;padding:5px 14px }
@@ -65,7 +65,7 @@
     .chatroom__input { display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid #ececec }
     .chatroom__input input[type=text] { flex:1;border:1px solid #ececec;border-radius:999px;padding:11px 18px;font-size:14px;outline:0;font-family:inherit }
     .chatroom__input input[type=text]:focus { border-color:#111 }
-    .chatroom__input button { border:0;background:#111;color:#fff;border-radius:999px;padding:11px 22px;font-weight:700;cursor:pointer }
+    .chatroom__input button { border:0;background:#111;color:#fff;border-radius:999px;padding:11px 22px;font-weight:600;cursor:pointer }
     .chat-attach { font-size:20px;cursor:pointer;user-select:none }
     .chat-fname { font-size:11px;color:#8a8a8f;max-width:90px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis }
 </style>

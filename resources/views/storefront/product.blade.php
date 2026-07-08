@@ -16,7 +16,7 @@
                     <img id="pdMain" src="{{ $product->image_url }}" alt="{{ $product->name }}">
                 @else
                     <div class="ph" style="background:linear-gradient(135deg,{{ $product->color ?: '#232526,#414345' }})">
-                        <span class="plabel" style="font-size:26px;font-weight:800;letter-spacing:.04em">{{ $product->brand }}</span>
+                        <span class="plabel" style="font-size:26px;font-weight:700;letter-spacing:.04em">{{ $product->brand }}</span>
                     </div>
                 @endif
             </div>

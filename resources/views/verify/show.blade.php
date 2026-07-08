@@ -18,7 +18,7 @@
         <div class="panel-card" style="background:linear-gradient(135deg,#faf6ee,#fff);border-color:var(--gold)">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap">
                 <div style="flex:1;min-width:220px">
-                    <div style="font-size:12px;letter-spacing:.14em;color:var(--gold);font-weight:800">MOONS CERTIFICATE OF AUTHENTICITY</div>
+                    <div style="font-size:12px;letter-spacing:.14em;color:var(--gold);font-weight:700">MOONS CERTIFICATE OF AUTHENTICITY</div>
                     <h1 style="margin:8px 0 4px;font-size:26px">{{ $certificate->brand }}</h1>
                     <div style="color:var(--ink-soft)">{{ $certificate->model }}</div>
                     <div style="margin-top:14px">

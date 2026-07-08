@@ -11,7 +11,7 @@
 <div class="auth">
     <div class="auth__card" style="text-align:center">
         <div class="auth__logo">MOO<b>N</b>S</div>
-        <div style="width:64px;height:64px;border-radius:16px;margin:18px auto 12px;display:grid;place-items:center;font-size:28px;font-weight:800;background:{{ $bg }};color:{{ $fg }};border:1px solid var(--line)">
+        <div style="width:64px;height:64px;border-radius:16px;margin:18px auto 12px;display:grid;place-items:center;font-size:28px;font-weight:700;background:{{ $bg }};color:{{ $fg }};border:1px solid var(--line)">
             {{ ['kakao'=>'K','naver'=>'N','google'=>'G'][$provider] ?? '?' }}</div>
         <h2 style="margin:0 0 4px">{{ $provider_name }} 계정으로 로그인</h2>
         <p class="auth__tag">{{ $provider_name }}에 로그인되어 있는 계정으로<br>MOONS 이용에 동의하고 계속합니다. (데모)</p>

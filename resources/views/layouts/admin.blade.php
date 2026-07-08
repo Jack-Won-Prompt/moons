@@ -57,7 +57,7 @@
         @yield('content')
     </main>
 </div>
-<style>.side-badge{background:#ff2d55;color:#fff;font-size:10px;font-weight:800;border-radius:999px;padding:1px 7px;margin-left:auto}</style>
+<style>.side-badge{background:#ff2d55;color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:1px 7px;margin-left:auto}</style>
 <script>
 (function(){
     var badge=document.getElementById('notiBadge');
