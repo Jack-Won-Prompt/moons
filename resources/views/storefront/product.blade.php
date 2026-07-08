@@ -67,10 +67,29 @@
 
             <p class="pd__desc">{{ $product->description }}</p>
 
+            @auth('web')
             <div class="pd__cta">
-                <button class="btn btn--lg" type="button">♡ 위시리스트</button>
-                <button class="btn btn--lg btn--primary" type="button">바로 구매하기</button>
+                <form action="{{ route('cart.add') }}" method="POST" style="flex:1">@csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <button class="btn btn--lg btn--block" type="submit">🛒 장바구니</button>
+                </form>
+                <form action="{{ route('cart.add') }}" method="POST" style="flex:1">@csrf
+                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                    <input type="hidden" name="buy_now" value="1">
+                    <button class="btn btn--lg btn--primary btn--block" type="submit">바로 구매하기</button>
+                </form>
             </div>
+            <form action="{{ route('chat.start') }}" method="POST" style="margin-top:12px">@csrf
+                <input type="hidden" name="type" value="product">
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                <button class="btn btn--block" type="submit">💬 상품 문의 (실시간 상담)</button>
+            </form>
+            @else
+            <div class="pd__cta">
+                <a class="btn btn--lg btn--block" href="{{ route('login') }}">🛒 장바구니</a>
+                <a class="btn btn--lg btn--primary btn--block" href="{{ route('login') }}">바로 구매하기</a>
+            </div>
+            @endauth
         </div>
     </div>
 

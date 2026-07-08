@@ -12,7 +12,12 @@
 <div class="wrap" style="max-width:920px">
     <div class="crumb" style="margin-top:22px"><a href="{{ route('sell.history') }}">판매 진행현황</a> / <span>{{ $sr->code }}</span></div>
     <div class="listing__head"><h1 style="font-size:24px">{{ $sr->brand }} · {{ $sr->title }}</h1>
-        <span class="pill pill--{{ $sr->status_color }}" style="margin-left:8px">{{ $sr->status_label }}</span></div>
+        <span class="pill pill--{{ $sr->status_color }}" style="margin-left:8px">{{ $sr->status_label }}</span>
+        <form action="{{ route('chat.start') }}" method="POST" style="margin-left:auto">@csrf
+            <input type="hidden" name="type" value="quote"><input type="hidden" name="sell_request_id" value="{{ $sr->id }}">
+            <button class="btn" style="padding:10px 16px">💬 견적 상담</button>
+        </form>
+    </div>
 
     {{-- 진행 타임라인 --}}
     @unless($rejected)

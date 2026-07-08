@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\CustomerAuthController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Partner;
 use App\Http\Controllers\VerifyController;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,29 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/sell/history', [Customer\SellController::class, 'history'])->name('sell.history');
     Route::get('/sell/{sellRequest}', [Customer\SellController::class, 'show'])->name('sell.show');
     Route::post('/sell/{sellRequest}/approve', [Customer\SellController::class, 'approve'])->name('sell.approve');
+
+    // 실시간 채팅 (고객)
+    Route::get('/chat', [Customer\ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/start', [Customer\ChatController::class, 'start'])->name('chat.start');
+    Route::get('/chat/{conversation}', [Customer\ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{conversation}/send', [Customer\ChatController::class, 'send'])->name('chat.send');
+    Route::get('/chat/{conversation}/poll', [Customer\ChatController::class, 'poll'])->name('chat.poll');
+
+    // 장바구니 · 주문 · 결제 (고객)
+    Route::get('/cart', [Customer\CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [Customer\CartController::class, 'add'])->name('cart.add');
+    Route::patch('/cart/{cartItem}', [Customer\CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{cartItem}', [Customer\CartController::class, 'remove'])->name('cart.remove');
+    Route::get('/checkout', [Customer\OrderController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout', [Customer\OrderController::class, 'place'])->name('orders.place');
+    Route::get('/orders', [Customer\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [Customer\OrderController::class, 'show'])->name('orders.show');
+
+    // 알림 (고객)
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
 });
 
 /*
@@ -76,6 +100,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // 블록체인 감정서
         Route::get('certificates', [Admin\CertificateController::class, 'index'])->name('certificates.index');
+
+        // 상담 모니터링 (본사)
+        Route::get('chat', [Admin\ChatController::class, 'index'])->name('chat.index');
+        Route::get('chat/{conversation}', [Admin\ChatController::class, 'show'])->name('chat.show');
+        Route::post('chat/{conversation}/send', [Admin\ChatController::class, 'send'])->name('chat.send');
+        Route::get('chat/{conversation}/poll', [Admin\ChatController::class, 'poll'])->name('chat.poll');
+
+        // 주문 관리 (본사)
+        Route::get('orders', [Admin\OrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/{order}', [Admin\OrderController::class, 'show'])->name('orders.show');
+        Route::patch('orders/{order}/status', [Admin\OrderController::class, 'updateStatus'])->name('orders.status');
+
+        // 알림 (본사)
+        Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+        Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+        Route::post('notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
     });
 });
 
@@ -101,5 +142,17 @@ Route::prefix('partner')->name('partner.')->group(function () {
         Route::post('intakes/{sellRequest}/appraise', [Partner\IntakeController::class, 'appraise'])->name('intakes.appraise');
         Route::post('intakes/{sellRequest}/bid', [Partner\IntakeController::class, 'bid'])->name('intakes.bid');
         Route::post('intakes/{sellRequest}/inbound', [Partner\IntakeController::class, 'inbound'])->name('intakes.inbound');
+
+        // 채팅 (지점)
+        Route::get('chat', [Partner\ChatController::class, 'index'])->name('chat.index');
+        Route::get('chat/{conversation}', [Partner\ChatController::class, 'show'])->name('chat.show');
+        Route::post('chat/{conversation}/send', [Partner\ChatController::class, 'send'])->name('chat.send');
+        Route::get('chat/{conversation}/poll', [Partner\ChatController::class, 'poll'])->name('chat.poll');
+
+        // 알림 (지점)
+        Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
+        Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
+        Route::post('notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
     });
 });

@@ -21,6 +21,10 @@
             <div class="grouplabel">감정 · 거래</div>
             <a class="side__link {{ str_starts_with($r,'admin.sell') ? 'on' : '' }}" href="{{ route('admin.sell.index') }}"><span class="i">🔍</span>감정 · 접수 관리</a>
             <a class="side__link {{ str_starts_with($r,'admin.certificates') ? 'on' : '' }}" href="{{ route('admin.certificates.index') }}"><span class="i">🎖️</span>블록체인 감정서</a>
+            <div class="grouplabel">주문 · 상담</div>
+            <a class="side__link {{ str_starts_with($r,'admin.orders') ? 'on' : '' }}" href="{{ route('admin.orders.index') }}"><span class="i">🧾</span>주문 관리</a>
+            <a class="side__link {{ str_starts_with($r,'admin.chat') ? 'on' : '' }}" href="{{ route('admin.chat.index') }}"><span class="i">💬</span>상담 모니터링</a>
+            <a class="side__link {{ str_starts_with($r,'admin.notifications') ? 'on' : '' }}" href="{{ route('admin.notifications.index') }}"><span class="i">🔔</span>알림 <span class="side-badge" id="notiBadge" style="display:none"></span></a>
             <div class="grouplabel">바로가기</div>
             <a class="side__link" href="{{ route('home') }}" target="_blank"><span class="i">🛍️</span>쇼핑몰 보기</a>
         </nav>
@@ -47,5 +51,14 @@
         @yield('content')
     </main>
 </div>
+<style>.side-badge{background:#ff2d55;color:#fff;font-size:10px;font-weight:800;border-radius:999px;padding:1px 7px;margin-left:auto}</style>
+<script>
+(function(){
+    var badge=document.getElementById('notiBadge');
+    function refresh(){ fetch("{{ route('admin.notifications.unread') }}",{headers:{'X-Requested-With':'XMLHttpRequest'}}).then(r=>r.json()).then(function(d){
+        if(d.count>0){ badge.textContent=d.count>99?'99+':d.count; badge.style.display=''; } else badge.style.display='none'; }).catch(function(){}); }
+    refresh(); setInterval(refresh,15000);
+})();
+</script>
 </body>
 </html>

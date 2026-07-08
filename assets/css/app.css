@@ -77,6 +77,8 @@ button { font-family: inherit; cursor: pointer; }
     font-size: 11px; color: var(--ink-soft); transition: color .2s; }
 .iconbtn span.i { font-size: 20px; }
 .iconbtn:hover { color: var(--ink); }
+.noti-badge { position: absolute; top: -6px; right: -8px; min-width: 17px; height: 17px; padding: 0 4px; border-radius: 999px;
+    background: var(--sale); color: #fff; font-size: 10px; font-weight: 800; display: grid; place-items: center; line-height: 1; }
 
 /* Category nav */
 .catnav { border-bottom: 1px solid var(--line); background: #fff; }

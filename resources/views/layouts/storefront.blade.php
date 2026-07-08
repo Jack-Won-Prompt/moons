@@ -19,6 +19,8 @@
         @auth('web')
             <span>{{ $me->name }}님</span>
             <span class="sep">·</span>
+            <a href="{{ route('orders.index') }}">주문조회</a>
+            <span class="sep">·</span>
             <a href="{{ route('sell.history') }}">판매현황</a>
             <span class="sep">·</span>
             <a href="{{ route('mypage') }}">마이페이지</a>
@@ -47,8 +49,12 @@
         </form>
         <div class="header__actions">
             <a href="{{ route('sell.create') }}" class="iconbtn"><span class="i">💰</span>판매하기</a>
-            <a href="{{ route('verify.index') }}" class="iconbtn"><span class="i">🎖️</span>감정서</a>
-            <a href="{{ auth('web')->check() ? route('mypage') : route('login') }}" class="iconbtn"><span class="i">❤️</span>위시</a>
+            <a href="{{ auth('web')->check() ? route('chat.index') : route('login') }}" class="iconbtn"><span class="i">💬</span>상담</a>
+            <a href="{{ auth('web')->check() ? route('cart.index') : route('login') }}" class="iconbtn"><span class="i">🛒</span>장바구니</a>
+            <a href="{{ auth('web')->check() ? route('notifications.index') : route('login') }}" class="iconbtn" style="position:relative">
+                <span class="i">🔔</span>알림
+                <span class="noti-badge" id="notiBadge" style="display:none">0</span>
+            </a>
             <a href="{{ auth('web')->check() ? route('mypage') : route('login') }}" class="iconbtn"><span class="i">👤</span>마이</a>
         </div>
     </div>
@@ -132,6 +138,21 @@
         const w = e.target.closest('.wish');
         if (w) { e.preventDefault(); w.classList.toggle('on'); w.textContent = w.classList.contains('on') ? '♥' : '♡'; }
     });
+
+    // Notification bell — poll unread count
+    @auth('web')
+    (function () {
+        var badge = document.getElementById('notiBadge');
+        function refresh() {
+            fetch("{{ route('notifications.unread') }}", {headers:{'X-Requested-With':'XMLHttpRequest'}})
+                .then(r => r.json()).then(function (d) {
+                    if (d.count > 0) { badge.textContent = d.count > 99 ? '99+' : d.count; badge.style.display = ''; }
+                    else { badge.style.display = 'none'; }
+                }).catch(function(){});
+        }
+        refresh(); setInterval(refresh, 15000);
+    })();
+    @endauth
 </script>
 </body>
 </html>
