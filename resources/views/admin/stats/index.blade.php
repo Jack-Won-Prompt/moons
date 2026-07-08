@@ -2,12 +2,18 @@
 @section('title', '통계')
 @section('subtitle', '매출 · 주문 · 감정 · 재고 · 멤버십')
 
-@php $maxDay = max(1, $days->max('value')); @endphp
+@php $maxDay = max(1, $bars->max('value')); @endphp
 
 @section('content')
+<div style="display:flex;gap:8px;margin-bottom:18px">
+    @foreach([7=>'최근 7일',30=>'최근 30일',90=>'최근 90일'] as $d=>$label)
+        <a class="pbtn pbtn--sm {{ $days===$d ? 'pbtn--primary' : '' }}" href="{{ route('admin.stats.index', ['days'=>$d]) }}">{{ $label }}</a>
+    @endforeach
+</div>
+
 <div class="stats">
-    <div class="stat"><div class="k">💰 총 매출</div><div class="v">{{ number_format($kpi['revenue']) }}<small style="font-size:13px">원</small></div></div>
-    <div class="stat"><div class="k">🧾 주문</div><div class="v">{{ number_format($kpi['orders']) }}</div></div>
+    <div class="stat"><div class="k">💰 매출 ({{ $days }}일)</div><div class="v">{{ number_format($kpi['revenue']) }}<small style="font-size:13px">원</small></div></div>
+    <div class="stat"><div class="k">🧾 주문 ({{ $days }}일)</div><div class="v">{{ number_format($kpi['orders']) }}</div></div>
     <div class="stat"><div class="k">📊 평균 객단가</div><div class="v">{{ number_format($kpi['avg_order']) }}<small style="font-size:13px">원</small></div></div>
     <div class="stat"><div class="k">👥 회원</div><div class="v">{{ number_format($kpi['members']) }}</div></div>
     <div class="stat"><div class="k">🔍 감정</div><div class="v">{{ number_format($kpi['appraisals']) }}</div></div>
@@ -16,9 +22,9 @@
 
 {{-- 7일 매출 --}}
 <div class="panel"><div class="panel__body">
-    <h2 style="margin:0 0 18px;font-size:16px">최근 7일 매출</h2>
+    <h2 style="margin:0 0 18px;font-size:16px">매출 추이 ({{ $days<=30 ? '일별' : '주별' }})</h2>
     <div class="bars">
-        @foreach($days as $d)
+        @foreach($bars as $d)
             <div class="bar-col">
                 <div class="bar-val">{{ $d['value']>0 ? number_format($d['value']/10000).'만' : '' }}</div>
                 <div class="bar" style="height:{{ max(4, round($d['value']/$maxDay*140)) }}px"></div>

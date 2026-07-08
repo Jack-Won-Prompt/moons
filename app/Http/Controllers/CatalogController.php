@@ -64,13 +64,30 @@ class CatalogController extends Controller
 
     public function product(Product $product)
     {
+        // 판매중지(비활성) 상품은 노출하지 않음
+        abort_unless($product->is_active, 404);
+
         $product->increment('view_count');
+        $product->load(['reviews.user']);
 
         $related = Product::active()
             ->where('category_id', $product->category_id)
             ->where('id', '!=', $product->id)
             ->take(4)->get();
 
-        return view('storefront.product', compact('product', 'related'));
+        $userId = auth('web')->id();
+        $wished = $product->wishedBy($userId);
+
+        // 구매 이력이 있고 아직 리뷰를 안 쓴 경우에만 작성 가능
+        $canReview = false;
+        if ($userId) {
+            $bought = \App\Models\OrderItem::where('product_id', $product->id)
+                ->whereHas('order', fn ($q) => $q->where('customer_id', $userId)->whereIn('status', ['delivered', 'shipping', 'paid', 'preparing']))
+                ->exists();
+            $already = $product->reviews()->where('user_id', $userId)->exists();
+            $canReview = $bought && ! $already;
+        }
+
+        return view('storefront.product', compact('product', 'related', 'wished', 'canReview'));
     }
 }

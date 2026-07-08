@@ -23,6 +23,7 @@
             <a class="side__link {{ str_starts_with($r,'admin.certificates') ? 'on' : '' }}" href="{{ route('admin.certificates.index') }}"><span class="i">🎖️</span>블록체인 감정서</a>
             <div class="grouplabel">주문 · 상담</div>
             <a class="side__link {{ str_starts_with($r,'admin.orders') ? 'on' : '' }}" href="{{ route('admin.orders.index') }}"><span class="i">🧾</span>주문 관리</a>
+            <a class="side__link {{ str_starts_with($r,'admin.settlements') ? 'on' : '' }}" href="{{ route('admin.settlements.index') }}"><span class="i">💵</span>정산 관리</a>
             <a class="side__link {{ str_starts_with($r,'admin.chat') ? 'on' : '' }}" href="{{ route('admin.chat.index') }}"><span class="i">💬</span>상담 모니터링</a>
             <a class="side__link {{ str_starts_with($r,'admin.notifications') ? 'on' : '' }}" href="{{ route('admin.notifications.index') }}"><span class="i">🔔</span>알림 <span class="side-badge" id="notiBadge" style="display:none"></span></a>
             <div class="grouplabel">운영 · 마케팅</div>

@@ -42,6 +42,7 @@ Route::get('/notices', [ContentController::class, 'notices'])->name('content.not
 Route::get('/notices/{notice}', [ContentController::class, 'notice'])->name('content.notice');
 Route::get('/faq', [ContentController::class, 'faqs'])->name('content.faqs');
 Route::get('/promotion/{promotion}', [ContentController::class, 'promotion'])->name('content.promotion');
+Route::get('/reviews', [Customer\ReviewController::class, 'gallery'])->name('reviews.gallery');
 
 /*
 |--------------------------------------------------------------------------
@@ -110,6 +111,14 @@ Route::middleware('auth:web')->group(function () {
     // 멤버십 (등급 · 포인트 · 쿠폰)
     Route::get('/membership', [Customer\MembershipController::class, 'index'])->name('membership.index');
     Route::post('/membership/coupons/{coupon}/claim', [Customer\MembershipController::class, 'claim'])->name('membership.claim');
+
+    // 위시리스트 (관심상품)
+    Route::get('/wishlist', [Customer\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/toggle', [Customer\WishlistController::class, 'toggle'])->name('wishlist.toggle');
+    Route::delete('/wishlist/{wishlist}', [Customer\WishlistController::class, 'remove'])->name('wishlist.remove');
+
+    // 리뷰 작성
+    Route::post('/product/{product}/reviews', [Customer\ReviewController::class, 'store'])->name('reviews.store');
 });
 
 /*
@@ -172,6 +181,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // 통계
         Route::get('stats', [Admin\StatController::class, 'index'])->name('stats.index');
+
+        // 정산 관리
+        Route::get('settlements', [Admin\SettlementController::class, 'index'])->name('settlements.index');
+        Route::post('settlements/{partner}/pay', [Admin\SettlementController::class, 'payStore'])->name('settlements.pay');
     });
 });
 
@@ -216,5 +229,8 @@ Route::prefix('partner')->name('partner.')->group(function () {
         Route::get('inventory/transfers', [Partner\InventoryController::class, 'transfers'])->name('inventory.transfers');
         Route::post('inventory/request', [Partner\InventoryController::class, 'requestTransfer'])->name('inventory.request');
         Route::post('inventory/transfers/{stockTransfer}/act', [Partner\InventoryController::class, 'act'])->name('inventory.act');
+
+        // 판매 정산
+        Route::get('settlements', [Partner\SettlementController::class, 'index'])->name('settlements.index');
     });
 });

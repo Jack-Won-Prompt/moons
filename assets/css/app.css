@@ -251,6 +251,7 @@ img.ph { object-fit: cover; background: #f2f2f2; }
 .btn--primary:hover { background: #000; opacity: .92; }
 .btn--block { width: 100%; }
 .btn--lg { padding: 17px 26px; font-size: 16px; flex: 1; }
+.wish-btn.on { background: #fff0f3; border-color: var(--sale); color: var(--sale); }
 
 /* ------------------------------------------------------------------ */
 /* Auth screens (customer/admin/partner)                              */

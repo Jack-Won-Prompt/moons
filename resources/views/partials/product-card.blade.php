@@ -9,7 +9,7 @@
                 @if($product->is_best)<span class="badge badge--best">BEST</span>@endif
                 @if($product->discount_rate)<span class="badge badge--sale">{{ $product->discount_rate }}%</span>@endif
             </div>
-            <button class="wish" type="button" aria-label="위시리스트">♡</button>
+            <button class="wish" type="button" aria-label="위시리스트" data-product-id="{{ $product->id }}">♡</button>
             @if($product->image)
                 <img class="ph" src="{{ $product->image_url }}" alt="{{ $product->name }}" loading="lazy">
             @else

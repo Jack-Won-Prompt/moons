@@ -65,6 +65,26 @@ class Product extends Model
         return $this->belongsTo(Partner::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->latest();
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    public function getRatingAvgAttribute(): float
+    {
+        return round((float) $this->reviews()->avg('rating'), 1);
+    }
+
+    public function wishedBy(?int $userId): bool
+    {
+        return $userId ? $this->wishlists()->where('user_id', $userId)->exists() : false;
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

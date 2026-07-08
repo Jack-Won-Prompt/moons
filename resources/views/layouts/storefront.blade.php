@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @auth('web')<meta name="wished-ids" content="{{ \App\Models\Wishlist::where('user_id', auth('web')->id())->pluck('product_id')->implode(',') }}">@endauth
     <title>@yield('title', 'MOONS · 럭셔리 셀렉트샵')</title>
     <meta name="description" content="MOONS — 전 세계 명품을 한 곳에서. 최신 트렌드의 럭셔리 셀렉트샵.">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -52,6 +54,7 @@
         <div class="header__actions">
             <a href="{{ route('sell.create') }}" class="iconbtn"><span class="i">💰</span>판매하기</a>
             <a href="{{ auth('web')->check() ? route('chat.index') : route('login') }}" class="iconbtn"><span class="i">💬</span>상담</a>
+            <a href="{{ auth('web')->check() ? route('wishlist.index') : route('login') }}" class="iconbtn"><span class="i">❤️</span>관심</a>
             <a href="{{ auth('web')->check() ? route('cart.index') : route('login') }}" class="iconbtn"><span class="i">🛒</span>장바구니</a>
             <a href="{{ auth('web')->check() ? route('notifications.index') : route('login') }}" class="iconbtn" style="position:relative">
                 <span class="i">🔔</span>알림
@@ -115,6 +118,7 @@
                 <ul>
                     <li><a href="{{ route('content.notices') }}">공지사항</a></li>
                     <li><a href="{{ route('content.faqs') }}">자주 묻는 질문</a></li>
+                    <li><a href="{{ route('reviews.gallery') }}">포토 후기</a></li>
                     <li><a href="{{ route('verify.index') }}">정품 인증 조회</a></li>
                 </ul>
             </div>
@@ -135,11 +139,40 @@
 </footer>
 
 <script>
-    // Lightweight wishlist toggle (client-side demo)
-    document.addEventListener('click', function (e) {
-        const w = e.target.closest('.wish');
-        if (w) { e.preventDefault(); w.classList.toggle('on'); w.textContent = w.classList.contains('on') ? '♥' : '♡'; }
-    });
+    // Wishlist (DB-backed)
+    (function () {
+        var meta = document.querySelector('meta[name=wished-ids]');
+        var authed = !!meta;
+        var wished = new Set((meta ? meta.content : '').split(',').filter(Boolean).map(Number));
+        var token = document.querySelector('meta[name=csrf-token]').content;
+        var LOGIN = "{{ route('login') }}", TOGGLE = "{{ route('wishlist.toggle') }}";
+
+        function paint() {
+            document.querySelectorAll('.wish[data-product-id]').forEach(function (w) {
+                var on = wished.has(+w.dataset.productId);
+                w.classList.toggle('on', on); w.textContent = on ? '♥' : '♡';
+            });
+            document.querySelectorAll('.wish-btn[data-product-id]').forEach(function (b) {
+                var on = wished.has(+b.dataset.productId);
+                b.classList.toggle('on', on);
+                var t = b.querySelector('.wtxt'); if (t) t.textContent = on ? '♥ 관심상품 담김' : '♡ 관심상품';
+            });
+        }
+        paint();
+
+        document.addEventListener('click', function (e) {
+            var el = e.target.closest('.wish[data-product-id], .wish-btn[data-product-id]');
+            if (!el) return;
+            e.preventDefault();
+            if (!authed) { location.href = LOGIN; return; }
+            var pid = +el.dataset.productId;
+            fetch(TOGGLE, { method: 'POST', headers: { 'X-CSRF-TOKEN': token, 'Content-Type': 'application/x-www-form-urlencoded', 'X-Requested-With': 'XMLHttpRequest' },
+                body: 'product_id=' + pid })
+              .then(function (r) { return r.json(); })
+              .then(function (d) { d.wished ? wished.add(pid) : wished.delete(pid); paint(); })
+              .catch(function () {});
+        });
+    })();
 
     // Notification bell — poll unread count
     @auth('web')

@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\PointTransaction;
+use App\Models\Settlement;
 use App\Models\UserCoupon;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
@@ -100,7 +101,7 @@ class OrderController extends Controller
             ]);
 
             foreach ($items as $it) {
-                $order->items()->create([
+                $orderItem = $order->items()->create([
                     'product_id' => $it->product_id,
                     'brand'      => $it->product->brand,
                     'name'       => $it->product->name,
@@ -108,6 +109,24 @@ class OrderController extends Controller
                     'price'      => $it->product->final_price,
                     'quantity'   => $it->quantity,
                 ]);
+
+                // 지점 상품이면 정산 레코드 생성 (본사 수수료 10%)
+                if ($it->product->partner_id) {
+                    $gross = $it->product->final_price * $it->quantity;
+                    $rate = 10;
+                    $commission = (int) round($gross * $rate / 100);
+                    Settlement::create([
+                        'store_id'        => $it->product->partner_id,
+                        'order_id'        => $order->id,
+                        'order_item_id'   => $orderItem->id,
+                        'product_id'      => $it->product_id,
+                        'gross_amount'    => $gross,
+                        'commission_rate' => $rate,
+                        'commission'      => $commission,
+                        'net_amount'      => $gross - $commission,
+                        'status'          => 'pending',
+                    ]);
+                }
             }
 
             // PG 결제 시뮬레이션 — 승인 성공
