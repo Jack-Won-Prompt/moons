@@ -34,12 +34,28 @@
             </div>
             <div class="form-row">
                 <label><input type="checkbox" name="remember"> 로그인 상태 유지</label>
-                <a href="#" style="color:var(--muted)">비밀번호 찾기</a>
+                <a href="{{ route('password.request') }}" style="color:var(--muted)">비밀번호 찾기</a>
             </div>
             <button type="submit" class="btn btn--primary btn--block">로그인</button>
         </form>
 
+        <div class="sns-login">
+            <div class="sns-sep"><span>SNS 계정으로 로그인</span></div>
+            <div class="sns-btns">
+                <a href="{{ route('social.redirect', 'kakao') }}" class="sns-btn" style="background:#FEE500;color:#191600">카카오</a>
+                <a href="{{ route('social.redirect', 'naver') }}" class="sns-btn" style="background:#03C75A;color:#fff">네이버</a>
+                <a href="{{ route('social.redirect', 'google') }}" class="sns-btn" style="background:#fff;color:#111;border:1px solid var(--line)">구글</a>
+            </div>
+        </div>
+
         <p class="auth__alt">아직 회원이 아니신가요? <a href="{{ route('register') }}">회원가입</a></p>
+        <style>
+            .sns-login{margin-top:22px}
+            .sns-sep{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin-bottom:14px}
+            .sns-sep::before,.sns-sep::after{content:"";flex:1;height:1px;background:var(--line)}
+            .sns-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+            .sns-btn{padding:12px 0;border-radius:11px;text-align:center;font-weight:700;font-size:14px}
+        </style>
 
         <div style="margin-top:18px;padding:12px 14px;background:var(--bg-alt);border-radius:11px;font-size:12px;color:var(--muted);text-align:center">
             데모 계정 — customer@moons.com / password

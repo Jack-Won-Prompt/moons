@@ -23,6 +23,8 @@
             <span class="sep">·</span>
             <a href="{{ route('sell.history') }}">판매현황</a>
             <span class="sep">·</span>
+            <a href="{{ route('membership.index') }}">멤버십</a>
+            <span class="sep">·</span>
             <a href="{{ route('mypage') }}">마이페이지</a>
             <span class="sep">·</span>
             <form action="{{ route('logout') }}" method="POST" style="display:inline">@csrf
@@ -111,9 +113,9 @@
             <div>
                 <h4>고객지원</h4>
                 <ul>
-                    <li><a href="{{ route('login') }}">로그인 / 회원가입</a></li>
-                    <li><a href="#">자주 묻는 질문</a></li>
-                    <li><a href="#">정품 인증 안내</a></li>
+                    <li><a href="{{ route('content.notices') }}">공지사항</a></li>
+                    <li><a href="{{ route('content.faqs') }}">자주 묻는 질문</a></li>
+                    <li><a href="{{ route('verify.index') }}">정품 인증 조회</a></li>
                 </ul>
             </div>
             <div>

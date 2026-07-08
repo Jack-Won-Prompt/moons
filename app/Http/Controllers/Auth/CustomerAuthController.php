@@ -47,7 +47,9 @@ class CustomerAuthController extends Controller
         Auth::guard('web')->login($user);
         $request->session()->regenerate();
 
-        return redirect()->route('home')->with('status', '회원가입이 완료되었습니다. 문스에 오신 것을 환영합니다!');
+        // 이메일 인증 안내로 이동 (데모: 인증 링크를 화면에 표시)
+        return redirect()->route('verification.notice')
+            ->with('status', '회원가입이 완료되었습니다. 이메일 인증을 진행해 주세요.');
     }
 
     public function logout(Request $request)

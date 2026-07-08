@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\Admin;
 use App\Http\Controllers\Auth\CustomerAuthController;
+use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\SocialAuthController;
 use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\ContentController;
 use App\Http\Controllers\Customer;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
@@ -31,6 +35,16 @@ Route::get('/verify/{code}/qr', [VerifyController::class, 'qr'])->name('verify.q
 
 /*
 |--------------------------------------------------------------------------
+| 콘텐츠 (공지 · FAQ · 기획전)
+|--------------------------------------------------------------------------
+*/
+Route::get('/notices', [ContentController::class, 'notices'])->name('content.notices');
+Route::get('/notices/{notice}', [ContentController::class, 'notice'])->name('content.notice');
+Route::get('/faq', [ContentController::class, 'faqs'])->name('content.faqs');
+Route::get('/promotion/{promotion}', [ContentController::class, 'promotion'])->name('content.promotion');
+
+/*
+|--------------------------------------------------------------------------
 | Customer authentication (web guard)
 |--------------------------------------------------------------------------
 */
@@ -39,8 +53,26 @@ Route::middleware('guest:web')->group(function () {
     Route::post('/login', [CustomerAuthController::class, 'login']);
     Route::get('/register', [CustomerAuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [CustomerAuthController::class, 'register']);
+
+    // SNS 로그인 (시뮬레이션 · Socialite 대체 지점)
+    Route::get('/auth/{provider}', [SocialAuthController::class, 'redirect'])->name('social.redirect');
+    Route::post('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])->name('social.callback');
+
+    // 비밀번호 찾기
+    Route::get('/forgot-password', [PasswordResetController::class, 'request'])->name('password.request');
+    Route::post('/forgot-password', [PasswordResetController::class, 'email'])->name('password.email');
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'reset'])->name('password.reset');
+    Route::post('/reset-password', [PasswordResetController::class, 'update'])->name('password.update');
 });
 Route::post('/logout', [CustomerAuthController::class, 'logout'])->name('logout');
+
+// 이메일 인증
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware('signed')->name('verification.verify');
+Route::middleware('auth:web')->group(function () {
+    Route::get('/email/verify', [EmailVerificationController::class, 'notice'])->name('verification.notice');
+    Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])->name('verification.send');
+});
 
 Route::middleware('auth:web')->group(function () {
     Route::view('/mypage', 'storefront.mypage')->name('mypage');
@@ -74,6 +106,10 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
     Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
     Route::post('/notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+
+    // 멤버십 (등급 · 포인트 · 쿠폰)
+    Route::get('/membership', [Customer\MembershipController::class, 'index'])->name('membership.index');
+    Route::post('/membership/coupons/{coupon}/claim', [Customer\MembershipController::class, 'claim'])->name('membership.claim');
 });
 
 /*
@@ -117,6 +153,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
         Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
         Route::post('notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+
+        // 멤버십 정책 · 쿠폰
+        Route::get('membership', [Admin\MembershipController::class, 'index'])->name('membership.index');
+        Route::post('membership/coupons', [Admin\MembershipController::class, 'storeCoupon'])->name('membership.coupons.store');
+        Route::post('membership/coupons/{coupon}/toggle', [Admin\MembershipController::class, 'toggleCoupon'])->name('membership.coupons.toggle');
+
+        // 멀티지점 재고 현황
+        Route::get('inventory', [Admin\InventoryController::class, 'index'])->name('inventory.index');
+
+        // 콘텐츠 관리
+        Route::get('content', [Admin\ContentController::class, 'index'])->name('content.index');
+        Route::post('content/banners', [Admin\ContentController::class, 'storeBanner'])->name('content.banners.store');
+        Route::post('content/promotions', [Admin\ContentController::class, 'storePromotion'])->name('content.promotions.store');
+        Route::post('content/notices', [Admin\ContentController::class, 'storeNotice'])->name('content.notices.store');
+        Route::post('content/faqs', [Admin\ContentController::class, 'storeFaq'])->name('content.faqs.store');
+        Route::delete('content/{type}/{id}', [Admin\ContentController::class, 'destroy'])->name('content.destroy');
+
+        // 통계
+        Route::get('stats', [Admin\StatController::class, 'index'])->name('stats.index');
     });
 });
 
@@ -154,5 +209,12 @@ Route::prefix('partner')->name('partner.')->group(function () {
         Route::get('notifications/unread', [NotificationController::class, 'unread'])->name('notifications.unread');
         Route::post('notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.readAll');
         Route::post('notifications/{notification}/read', [NotificationController::class, 'read'])->name('notifications.read');
+
+        // 멀티지점 재고 공유 · 이동
+        Route::get('inventory', [Partner\InventoryController::class, 'index'])->name('inventory.index');
+        Route::get('inventory/stores', [Partner\InventoryController::class, 'stores'])->name('inventory.stores');
+        Route::get('inventory/transfers', [Partner\InventoryController::class, 'transfers'])->name('inventory.transfers');
+        Route::post('inventory/request', [Partner\InventoryController::class, 'requestTransfer'])->name('inventory.request');
+        Route::post('inventory/transfers/{stockTransfer}/act', [Partner\InventoryController::class, 'act'])->name('inventory.act');
     });
 });

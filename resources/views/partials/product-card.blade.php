@@ -20,6 +20,9 @@
         </div>
         <div class="card__brand">{{ $product->brand }}</div>
         <div class="card__name">{{ $product->name }}</div>
+        <div class="card__seller {{ $product->seller_type === 'store' ? 'is-store' : '' }}">
+            {{ $product->seller_type === 'store' ? '🏬' : '🏢' }} {{ $product->seller_label }}
+        </div>
         <div class="card__price">
             @if($product->discount_rate)
                 <span class="rate">{{ $product->discount_rate }}%</span>

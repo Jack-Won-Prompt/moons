@@ -19,6 +19,7 @@
             <a class="side__link {{ str_starts_with($r,'partner.products') ? 'on' : '' }}" href="{{ route('partner.products.index') }}"><span class="i">📦</span>내 상품</a>
             <div class="grouplabel">감정 · 매입</div>
             <a class="side__link {{ str_starts_with($r,'partner.intakes') ? 'on' : '' }}" href="{{ route('partner.intakes.index') }}"><span class="i">🔍</span>판매 접수 · 감정</a>
+            <a class="side__link {{ str_starts_with($r,'partner.inventory') ? 'on' : '' }}" href="{{ route('partner.inventory.index') }}"><span class="i">📦</span>재고 · 지점이동</a>
             <div class="grouplabel">상담 · 알림</div>
             <a class="side__link {{ str_starts_with($r,'partner.chat') ? 'on' : '' }}" href="{{ route('partner.chat.index') }}"><span class="i">💬</span>고객 상담</a>
             <a class="side__link {{ str_starts_with($r,'partner.notifications') ? 'on' : '' }}" href="{{ route('partner.notifications.index') }}"><span class="i">🔔</span>알림 <span class="side-badge" id="notiBadge" style="display:none"></span></a>

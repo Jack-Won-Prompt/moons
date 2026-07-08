@@ -181,8 +181,10 @@ img.ph { object-fit: cover; background: #f2f2f2; }
 .wish.on { color: var(--sale); }
 
 .card__brand { font-size: 14px; font-weight: 800; letter-spacing: -0.01em; }
-.card__name { font-size: 13px; color: var(--ink-soft); margin: 3px 0 8px;
+.card__name { font-size: 13px; color: var(--ink-soft); margin: 3px 0 5px;
     display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.card__seller { font-size: 11px; color: var(--muted); margin-bottom: 7px; font-weight: 600; }
+.card__seller.is-store { color: var(--gold); }
 .card__price { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
 .card__price .rate { color: var(--sale); font-weight: 800; font-size: 16px; }
 .card__price .now { font-weight: 800; font-size: 16px; }

@@ -25,6 +25,11 @@
             <a class="side__link {{ str_starts_with($r,'admin.orders') ? 'on' : '' }}" href="{{ route('admin.orders.index') }}"><span class="i">🧾</span>주문 관리</a>
             <a class="side__link {{ str_starts_with($r,'admin.chat') ? 'on' : '' }}" href="{{ route('admin.chat.index') }}"><span class="i">💬</span>상담 모니터링</a>
             <a class="side__link {{ str_starts_with($r,'admin.notifications') ? 'on' : '' }}" href="{{ route('admin.notifications.index') }}"><span class="i">🔔</span>알림 <span class="side-badge" id="notiBadge" style="display:none"></span></a>
+            <div class="grouplabel">운영 · 마케팅</div>
+            <a class="side__link {{ str_starts_with($r,'admin.inventory') ? 'on' : '' }}" href="{{ route('admin.inventory.index') }}"><span class="i">📦</span>멀티지점 재고</a>
+            <a class="side__link {{ str_starts_with($r,'admin.membership') ? 'on' : '' }}" href="{{ route('admin.membership.index') }}"><span class="i">⭐</span>멤버십 · 쿠폰</a>
+            <a class="side__link {{ str_starts_with($r,'admin.content') ? 'on' : '' }}" href="{{ route('admin.content.index') }}"><span class="i">🖼️</span>콘텐츠 관리</a>
+            <a class="side__link {{ str_starts_with($r,'admin.stats') ? 'on' : '' }}" href="{{ route('admin.stats.index') }}"><span class="i">📈</span>통계</a>
             <div class="grouplabel">바로가기</div>
             <a class="side__link" href="{{ route('home') }}" target="_blank"><span class="i">🛍️</span>쇼핑몰 보기</a>
         </nav>

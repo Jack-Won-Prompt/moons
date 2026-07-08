@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\CartItem;
 use App\Models\Order;
 use App\Models\Payment;
+use App\Models\PointTransaction;
+use App\Models\UserCoupon;
 use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,10 +27,15 @@ class OrderController extends Controller
             return redirect()->route('cart.index')->with('status', '장바구니가 비어 있습니다.');
         }
 
+        $user = Auth::guard('web')->user();
+        $coupons = UserCoupon::with('coupon')->where('user_id', $user->id)->usable()->get()
+            ->filter(fn ($uc) => $uc->coupon && $uc->coupon->isValid());
+
         return view('customer.order.checkout', [
             'items'    => $items,
             'subtotal' => $items->sum('line_total'),
-            'user'     => Auth::guard('web')->user(),
+            'user'     => $user,
+            'coupons'  => $coupons,
         ]);
     }
 
@@ -36,24 +43,43 @@ class OrderController extends Controller
     public function place(Request $request)
     {
         $data = $request->validate([
-            'receiver_name' => ['required', 'string', 'max:60'],
-            'phone'         => ['required', 'string', 'max:40'],
-            'zipcode'       => ['nullable', 'string', 'max:10'],
-            'address'       => ['required', 'string', 'max:200'],
-            'address_detail'=> ['nullable', 'string', 'max:200'],
-            'memo'          => ['nullable', 'string', 'max:200'],
-            'method'        => ['required', 'in:card,vbank,kakao,naver'],
+            'receiver_name'  => ['required', 'string', 'max:60'],
+            'phone'          => ['required', 'string', 'max:40'],
+            'zipcode'        => ['nullable', 'string', 'max:10'],
+            'address'        => ['required', 'string', 'max:200'],
+            'address_detail' => ['nullable', 'string', 'max:200'],
+            'memo'           => ['nullable', 'string', 'max:200'],
+            'method'         => ['required', 'in:card,vbank,kakao,naver'],
+            'user_coupon_id' => ['nullable', 'exists:user_coupons,id'],
+            'point_used'     => ['nullable', 'integer', 'min:0'],
         ]);
 
-        $customerId = Auth::guard('web')->id();
+        $user = Auth::guard('web')->user();
+        $customerId = $user->id;
         $items = CartItem::with('product')->where('customer_id', $customerId)->get()
             ->filter(fn ($i) => $i->product);
         abort_if($items->isEmpty(), 400, '장바구니가 비어 있습니다.');
 
         $subtotal = $items->sum('line_total');
-        $shipping = 0;
 
-        $order = DB::transaction(function () use ($data, $customerId, $items, $subtotal, $shipping) {
+        // 쿠폰 할인
+        $couponDiscount = 0;
+        $userCoupon = null;
+        if (! empty($data['user_coupon_id'])) {
+            $userCoupon = UserCoupon::with('coupon')->where('user_id', $customerId)->usable()->find($data['user_coupon_id']);
+            if ($userCoupon && $userCoupon->coupon && $userCoupon->coupon->isValid()) {
+                $couponDiscount = $userCoupon->coupon->discountFor($subtotal);
+            } else {
+                $userCoupon = null;
+            }
+        }
+
+        // 포인트 사용 (보유·잔여금액 이내)
+        $pointUsed = min((int) ($data['point_used'] ?? 0), (int) $user->points, max(0, $subtotal - $couponDiscount));
+        $total = max(0, $subtotal - $couponDiscount - $pointUsed);
+        $pointEarned = (int) floor($total * $user->pointRate());
+
+        $order = DB::transaction(function () use ($data, $user, $customerId, $items, $subtotal, $couponDiscount, $pointUsed, $total, $pointEarned, $userCoupon) {
             $order = Order::create([
                 'code'           => 'ORD-' . now()->format('ymd') . '-' . strtoupper(Str::random(4)),
                 'customer_id'    => $customerId,
@@ -64,8 +90,12 @@ class OrderController extends Controller
                 'address_detail' => $data['address_detail'] ?? null,
                 'memo'           => $data['memo'] ?? null,
                 'subtotal'       => $subtotal,
-                'shipping_fee'   => $shipping,
-                'total'          => $subtotal + $shipping,
+                'shipping_fee'   => 0,
+                'discount'       => $couponDiscount,
+                'point_used'     => $pointUsed,
+                'coupon_id'      => $userCoupon?->coupon_id,
+                'point_earned'   => $pointEarned,
+                'total'          => $total,
                 'status'         => 'pending',
             ]);
 
@@ -80,16 +110,34 @@ class OrderController extends Controller
                 ]);
             }
 
-            // PG 결제 시뮬레이션 — 승인 성공 처리
+            // PG 결제 시뮬레이션 — 승인 성공
             Payment::create([
-                'order_id' => $order->id,
-                'method'   => $data['method'],
-                'amount'   => $order->total,
-                'status'   => 'paid',
-                'pg_tid'   => 'PG' . strtoupper(Str::random(12)),
-                'paid_at'  => now(),
+                'order_id' => $order->id, 'method' => $data['method'], 'amount' => $total,
+                'status' => 'paid', 'pg_tid' => 'PG' . strtoupper(Str::random(12)), 'paid_at' => now(),
             ]);
             $order->update(['status' => 'paid']);
+
+            // 쿠폰 사용 처리
+            if ($userCoupon) {
+                $userCoupon->update(['used_at' => now(), 'order_id' => $order->id]);
+            }
+
+            // 포인트 사용 차감
+            if ($pointUsed > 0) {
+                $user->points -= $pointUsed;
+                PointTransaction::create(['user_id' => $customerId, 'amount' => -$pointUsed,
+                    'reason' => "주문 사용 ({$order->code})", 'order_id' => $order->id, 'balance' => $user->points]);
+            }
+
+            // 포인트 적립 + 누적구매 + 등급 재산정
+            $user->points += $pointEarned;
+            $user->total_spent += $total;
+            $user->save();
+            if ($pointEarned > 0) {
+                PointTransaction::create(['user_id' => $customerId, 'amount' => $pointEarned,
+                    'reason' => "구매 적립 ({$order->code})", 'order_id' => $order->id, 'balance' => $user->points]);
+            }
+            $user->recalcGrade();
 
             CartItem::where('customer_id', $customerId)->delete();
 

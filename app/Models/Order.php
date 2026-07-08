@@ -8,7 +8,8 @@ class Order extends Model
 {
     protected $fillable = [
         'code', 'customer_id', 'receiver_name', 'phone', 'zipcode', 'address',
-        'address_detail', 'memo', 'subtotal', 'shipping_fee', 'total', 'status', 'tracking_no',
+        'address_detail', 'memo', 'subtotal', 'shipping_fee', 'discount', 'point_used',
+        'coupon_id', 'point_earned', 'total', 'status', 'tracking_no',
     ];
 
     public const STATUSES = [

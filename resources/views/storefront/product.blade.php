@@ -59,7 +59,7 @@
             <div class="pd__meta">
                 <dl>
                     <dt>카테고리</dt><dd>{{ $product->category->parent?->name }} · {{ $product->category->name }}</dd>
-                    <dt>판매자</dt><dd>{{ $product->partner?->company_name ?? 'MOONS 공식 · 정품 감정 완료' }}</dd>
+                    <dt>판매자</dt><dd>{{ $product->seller_type === 'store' ? '🏬' : '🏢' }} <b>{{ $product->seller_label }}</b> · 정품 감정 완료</dd>
                     <dt>배송</dt><dd>무료배송 · 정품 보증서 동봉</dd>
                     <dt>재고</dt><dd>{{ $product->stock > 0 ? '재고 있음 ('.$product->stock.'개)' : '품절' }}</dd>
                 </dl>

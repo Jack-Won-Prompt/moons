@@ -33,6 +33,18 @@ class Product extends Model
         'gallery'   => 'array',
     ];
 
+    /** 판매자 라벨: 본사(partner 없음) 또는 지점명 */
+    public function getSellerLabelAttribute(): string
+    {
+        return $this->partner?->company_name ?? 'MOONS 본사';
+    }
+
+    /** 판매자 유형: head_office / store */
+    public function getSellerTypeAttribute(): string
+    {
+        return $this->partner_id ? 'store' : 'head_office';
+    }
+
     /** Main image URL: full remote URL as-is, local relative path via asset(), else null. */
     public function getImageUrlAttribute(): ?string
     {

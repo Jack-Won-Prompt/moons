@@ -7,30 +7,44 @@
     {{-- Hero --}}
     <section class="hero">
         <div class="hero__grid">
-            @if($slides->count())
-                <div class="hero__slider" id="heroSlider" data-count="{{ $slides->count() }}">
+            @php $useBanners = $heroBanners->count() > 0; $count = $useBanners ? $heroBanners->count() : $slides->count(); @endphp
+            @if($count)
+                <div class="hero__slider" id="heroSlider" data-count="{{ $count }}">
                     <div class="hero__track">
-                        @foreach($slides as $s)
-                            <a href="{{ route('catalog.product', $s) }}" class="hero__slide">
-                                <img src="{{ $s->image_url }}" alt="{{ $s->name }}" {{ $loop->first ? '' : 'loading=lazy' }}>
-                                <div class="hero__slide-cap">
-                                    <div class="eyebrow">MOONS EXCLUSIVE · {{ $s->brand }}</div>
-                                    <h2>{{ \Illuminate\Support\Str::limit($s->name, 40) }}</h2>
-                                    <p class="hero__slide-price">
-                                        @if($s->discount_rate)<span class="rate">{{ $s->discount_rate }}%</span>@endif
-                                        <span class="now">{{ number_format($s->final_price) }}원</span>
-                                        @if($s->discount_rate)<span class="was">{{ number_format($s->price) }}원</span>@endif
-                                    </p>
-                                </div>
-                            </a>
-                        @endforeach
+                        @if($useBanners)
+                            @foreach($heroBanners as $b)
+                                <a href="{{ $b->link ?: '#' }}" class="hero__slide" style="background:linear-gradient(135deg,{{ $b->gradient ?: '#1a1a2e,#4b1248' }})">
+                                    @if($b->image)<img src="{{ $b->image_url }}" alt="{{ $b->title }}">@endif
+                                    <div class="hero__slide-cap">
+                                        @if($b->eyebrow)<div class="eyebrow">{{ $b->eyebrow }}</div>@endif
+                                        <h2>{{ $b->title }}</h2>
+                                        @if($b->subtitle)<p class="hero__slide-price"><span class="now" style="font-size:15px;font-weight:500">{{ $b->subtitle }}</span></p>@endif
+                                    </div>
+                                </a>
+                            @endforeach
+                        @else
+                            @foreach($slides as $s)
+                                <a href="{{ route('catalog.product', $s) }}" class="hero__slide">
+                                    <img src="{{ $s->image_url }}" alt="{{ $s->name }}" {{ $loop->first ? '' : 'loading=lazy' }}>
+                                    <div class="hero__slide-cap">
+                                        <div class="eyebrow">MOONS EXCLUSIVE · {{ $s->brand }}</div>
+                                        <h2>{{ \Illuminate\Support\Str::limit($s->name, 40) }}</h2>
+                                        <p class="hero__slide-price">
+                                            @if($s->discount_rate)<span class="rate">{{ $s->discount_rate }}%</span>@endif
+                                            <span class="now">{{ number_format($s->final_price) }}원</span>
+                                            @if($s->discount_rate)<span class="was">{{ number_format($s->price) }}원</span>@endif
+                                        </p>
+                                    </div>
+                                </a>
+                            @endforeach
+                        @endif
                     </div>
                     <button class="hero__nav prev" type="button" aria-label="이전">‹</button>
                     <button class="hero__nav next" type="button" aria-label="다음">›</button>
                     <div class="hero__dots">
-                        @foreach($slides as $i => $s)
+                        @for($i = 0; $i < $count; $i++)
                             <button type="button" class="dot {{ $i === 0 ? 'on' : '' }}" data-i="{{ $i }}" aria-label="{{ $i + 1 }}번 슬라이드"></button>
-                        @endforeach
+                        @endfor
                     </div>
                 </div>
             @else
@@ -70,6 +84,29 @@
             @endforeach
         </div>
     </section>
+
+    {{-- 기획전 --}}
+    @if($promotions->count())
+    <section class="section">
+        <div class="section__head"><div class="section__title">기획전 <small>MOONS가 준비한 특별 기획</small></div></div>
+        <div class="promo-grid">
+            @foreach($promotions as $promo)
+                <a href="{{ route('content.promotion', $promo) }}" class="promo-card" style="background:linear-gradient(135deg,{{ $promo->gradient ?: '#1a1a2e,#4b1248' }})">
+                    <div class="eyebrow">기획전</div>
+                    <h3>{{ $promo->title }}</h3>
+                    @if($promo->subtitle)<p>{{ $promo->subtitle }}</p>@endif
+                </a>
+            @endforeach
+        </div>
+    </section>
+    <style>
+        .promo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .promo-card{border-radius:14px;padding:28px 24px;color:#fff;min-height:150px;display:flex;flex-direction:column;justify-content:flex-end}
+        .promo-card .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+        .promo-card h3{font-size:20px;font-weight:800;margin:6px 0 4px} .promo-card p{font-size:13px;opacity:.9;margin:0}
+        @media(max-width:720px){ .promo-grid{grid-template-columns:1fr} }
+    </style>
+    @endif
 
     {{-- New arrivals --}}
     @if($newArrivals->count())
