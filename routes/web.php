@@ -87,6 +87,7 @@ Route::middleware('auth:web')->group(function () {
 
     // 실시간 채팅 (고객)
     Route::get('/chat', [Customer\ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/widget', [Customer\ChatController::class, 'widget'])->name('chat.widget');
     Route::post('/chat/start', [Customer\ChatController::class, 'start'])->name('chat.start');
     Route::get('/chat/{conversation}', [Customer\ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{conversation}/send', [Customer\ChatController::class, 'send'])->name('chat.send');

@@ -69,6 +69,25 @@ class ChatController extends Controller
         return redirect()->route('chat.show', $conversation);
     }
 
+    /** 플로팅 위젯 — 고객 1:1 상담 대화 get-or-create + 메시지 반환 */
+    public function widget()
+    {
+        $customerId = Auth::guard('web')->id();
+
+        $conversation = Conversation::firstOrCreate(
+            ['customer_id' => $customerId, 'type' => 'support', 'product_id' => null, 'sell_request_id' => null, 'status' => 'open'],
+            ['code' => 'CV-' . strtoupper(Str::random(6)), 'store_id' => null, 'subject' => '1:1 고객 상담']
+        );
+        ChatService::markRead($conversation, 'customer');
+
+        return response()->json([
+            'conversation_id' => $conversation->id,
+            'send_url'        => route('chat.send', $conversation),
+            'poll_url'        => route('chat.poll', $conversation),
+            'messages'        => ChatService::poll($conversation, 0),
+        ]);
+    }
+
     public function show(Conversation $conversation)
     {
         abort_unless($conversation->customer_id === Auth::guard('web')->id(), 403);
