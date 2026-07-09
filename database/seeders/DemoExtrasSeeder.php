@@ -105,6 +105,10 @@ class DemoExtrasSeeder extends Seeder
             'title' => '50% 이상 특가', 'subtitle' => '반값 이하 명품', 'gradient' => '#8e0e00,#1f1c18',
             'filters' => ['min_discount' => 50], 'is_active' => true,
         ]);
+        Promotion::updateOrCreate(['code' => 'PR-LV'], [
+            'title' => 'LOUIS VUITTON', 'subtitle' => '루이비통 스페셜 셀렉션', 'gradient' => '#2c1810,#5c2e0e',
+            'filters' => ['brand' => 'LOUIS VUITTON'], 'is_active' => true,
+        ]);
 
         /* 공지 · FAQ */
         Notice::updateOrCreate(['title' => 'MOONS 정품 감정 시스템 오픈'], ['category' => 'notice', 'body' => "블록체인 기반 감정서와 Digital Product Passport를 도입했습니다.\n모든 상품은 정품 감정 후 판매됩니다.", 'is_pinned' => true]);
